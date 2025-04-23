@@ -167,12 +167,10 @@ The ML model is a TensorFlow/Keras neural network trained on historical fault da
 
 ## 🔮 Future Work
 
-- [ ] Integration of ML models for predictive fault detection
 - [ ] Enhanced recovery strategies
 - [ ] More sophisticated consensus mechanisms
 - [ ] Additional fault simulation scenarios
 - [ ] Extended monitoring metrics
-- [ ] Multi-process migration coordination
 
 ## 🤝 Contributing
 
