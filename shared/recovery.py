@@ -10,6 +10,7 @@ import shutil
 from comm import NodeCommunicator
 import time
 import threading
+import argparse
 
 class RecoveryManager:
     def __init__(self):
@@ -241,6 +242,59 @@ class RecoveryManager:
             
             time.sleep(5)
     
+    def handle_preventive_migration(self, pid, prediction, fault_type):
+        """Handle preventive migration triggered by ML predictions"""
+        try:
+            print(f"Initiating preventive migration for PID {pid} due to predicted {fault_type} fault (p={prediction:.4f})")
+            
+            # Create a checkpoint of the process
+            checkpoint_dir = self.simulate_checkpoint(pid)
+            
+            if checkpoint_dir:
+                # Find an available node to transfer the process to
+                available_nodes = self.get_available_nodes()
+                
+                if available_nodes:
+                    # Transfer the checkpoint to the first available node
+                    target_node = available_nodes[0]
+                    print(f"Preventively transferring process to {target_node}...")
+                    
+                    # Log the preventive migration
+                    self.communicator.broadcast_message('RECOVERY', {
+                        'action': 'preventive_migration',
+                        'source_node': self.node_id,
+                        'target_node': target_node,
+                        'pid': pid,
+                        'fault_type': fault_type,
+                        'prediction': prediction
+                    })
+                    
+                    # Kill the process on this node
+                    process = psutil.Process(pid)
+                    process.kill()
+                    
+                    # Transfer the checkpoint
+                    success = self.transfer_checkpoint_to_node(checkpoint_dir, target_node)
+                    
+                    if success:
+                        print(f"Successfully transferred process to {target_node}")
+                        return True
+                    else:
+                        print(f"Failed to transfer process, restoring locally")
+                        self.simulate_restore(checkpoint_dir)
+                        return False
+                else:
+                    print("No available nodes found, restoring locally")
+                    self.simulate_restore(checkpoint_dir)
+                    return False
+            else:
+                print(f"Failed to create checkpoint for PID {pid}")
+                return False
+                
+        except Exception as e:
+            print(f"Error in preventive migration: {e}")
+            return False
+    
     def cleanup(self):
         """Clean up resources"""
         self.communicator.close()
@@ -248,8 +302,27 @@ class RecoveryManager:
         self.context.term()
 
 if __name__ == "__main__":
-    recovery = RecoveryManager()
+    # Parse command-line arguments for preventive migration
+    parser = argparse.ArgumentParser(description='Recovery Manager')
+    parser.add_argument('--preventive-migrate', type=int, help='PID to preventively migrate')
+    parser.add_argument('--prediction', type=float, default=0.9, help='Fault prediction probability')
+    parser.add_argument('--fault-type', type=str, default='unknown', help='Type of predicted fault')
+    args = parser.parse_args()
+    
+    recovery_manager = RecoveryManager()
+    
     try:
-        recovery.monitor_and_recover()
+        if args.preventive_migrate:
+            # Handle preventive migration
+            recovery_manager.handle_preventive_migration(
+                args.preventive_migrate, 
+                args.prediction, 
+                args.fault_type
+            )
+        else:
+            # Standard monitor and recover
+            recovery_manager.monitor_and_recover()
     except KeyboardInterrupt:
-        recovery.cleanup() 
+        print("Shutting down Recovery Manager...")
+    finally:
+        recovery_manager.cleanup() 

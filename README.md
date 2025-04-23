@@ -18,6 +18,7 @@ A distributed fault-tolerance system that simulates 3 independent nodes with mon
 - [Process Migration with CRIU](#-process-migration-with-criu)
 - [Architecture](#-architecture)
 - [Monitoring](#-monitoring)
+- [ML-Based Fault Detection](#-ml-based-fault-detection)
 - [Future Work](#-future-work)
 - [Contributing](#-contributing)
 - [License](#-license)
@@ -141,6 +142,28 @@ The system monitors:
 | Fault events | Detection and logging of system faults |
 | Recovery actions | Automatic recovery operation logs |
 | Process migrations | Success/failure of migrations |
+| ML Predictions | Machine learning-based fault predictions |
+
+## 🧠 ML-Based Fault Detection
+
+The system includes a machine learning component that predicts potential faults before they occur, enabling preventive action:
+
+- **Proactive Fault Detection**: The ML model analyzes system metrics to identify patterns that typically precede failures
+- **Preventive Process Migration**: When a fault is predicted with high confidence, the system automatically migrates processes to healthy nodes
+- **Self-Learning Capability**: The model continuously improves as it observes more system behavior
+- **Multiple Fault Types**: Can predict CPU stress, memory leaks, and disk failures
+
+<details>
+<summary>How ML-Based Fault Detection Works</summary>
+
+1. **Data Collection**: System metrics are continuously collected from all nodes
+2. **Feature Extraction**: Key features are extracted and normalized as input to the ML model
+3. **Fault Prediction**: The ML model predicts the probability of an imminent fault
+4. **Preventive Action**: If the prediction exceeds a threshold, preventive measures are triggered
+5. **Feedback Loop**: Actual outcomes are used to enhance future predictions
+
+The ML model is a TensorFlow/Keras neural network trained on historical fault data.
+</details>
 
 ## 🔮 Future Work
 
