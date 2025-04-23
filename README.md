@@ -178,6 +178,9 @@ The ML model is a TensorFlow/Keras neural network trained on historical fault da
 - [ ] More sophisticated consensus mechanisms
 - [ ] Additional fault simulation scenarios
 - [ ] Extended monitoring metrics
+- [ ] Multi-process migration coordination
+- [ ] Blockchain-based fault logging (Hyperledger/Ethereum)
+- [ ] Integration with cloud provider APIs for automatic resource scaling
 
 ## 🤝 Contributing
 
