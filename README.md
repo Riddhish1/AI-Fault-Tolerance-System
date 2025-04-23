@@ -1,4 +1,4 @@
-# Enhanced Fault Tolerance MVP
+# Enhanced Fault Tolerance System
 
 A distributed fault-tolerance system that simulates 3 independent nodes with monitoring, fault simulation, recovery capabilities, and process migration using CRIU.
 
@@ -94,4 +94,4 @@ The system monitors:
 - More sophisticated consensus mechanisms
 - Additional fault simulation scenarios
 - Extended monitoring metrics
-- Multi-process migration coordination 
+- Multi-process migration coordination
