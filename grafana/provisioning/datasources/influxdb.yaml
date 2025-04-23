@@ -1,0 +1,15 @@
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB-Telegraf
+    type: influxdb
+    access: proxy
+    url: http://influxdb:8086
+    database: telegraf
+    user: admin
+    secureJsonData:
+      password: adminpassword
+    jsonData:
+      httpMode: GET
+      version: InfluxQL
+    editable: true 

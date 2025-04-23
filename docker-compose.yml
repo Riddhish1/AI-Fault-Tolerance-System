@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  influxdb:
+    image: influxdb:1.8
+    ports:
+      - "8086:8086"
+    environment:
+      - INFLUXDB_DB=telegraf
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=adminpassword
+    volumes:
+      - influxdb-data:/var/lib/influxdb
+      - ./influxdb/init-influxdb.sh:/docker-entrypoint-initdb.d/init-influxdb.sh
+    command: bash -c "chmod +x /docker-entrypoint-initdb.d/init-influxdb.sh && influxd -config /etc/influxdb/influxdb.conf"
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+    depends_on:
+      - influxdb
+
+  node1:
+    build: .
+    hostname: node1
+    volumes:
+      - type: bind
+        source: ./node1
+        target: /app/node
+    environment:
+      - NODE_ID=1
+    depends_on:
+      - influxdb
+    command: bash -c "chmod +x /app/node/start.sh && /app/node/start.sh"
+
+  node2:
+    build: .
+    hostname: node2
+    volumes:
+      - type: bind
+        source: ./node2
+        target: /app/node
+    environment:
+      - NODE_ID=2
+    depends_on:
+      - influxdb
+    command: bash -c "chmod +x /app/node/start.sh && /app/node/start.sh"
+
+  node3:
+    build: .
+    hostname: node3
+    volumes:
+      - type: bind
+        source: ./node3
+        target: /app/node
+    environment:
+      - NODE_ID=3
+    depends_on:
+      - influxdb
+    command: bash -c "chmod +x /app/node/start.sh && /app/node/start.sh"
+
+volumes:
+  influxdb-data: 
