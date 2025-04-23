@@ -116,18 +116,25 @@ All process state is preserved during migration, including:
 ## 🏗️ Architecture
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/36799599/175767970-f3d0a5c0-8b0f-48a6-af61-b9c3b1bdc79a.png" alt="System Architecture" width="700">
+  <img src="architecture-diagram.svg" alt="System Architecture Diagram" width="700">
 </p>
 
-- 3 independent nodes running in Docker containers
-- Each node runs:
+The architecture consists of the following components:
+
+1. **Distributed Nodes**: 3 independent nodes running in Docker containers
+2. **Monitoring Agent**: Telegraf for collecting system metrics
+3. **Fault Prediction Module**: ML-based fault detection using TensorFlow
+4. **Recovery Module**: CRIU for process checkpointing and migration
+5. **Inter-Node Communication**: ZeroMQ for distributed communication
+6. **Real-Time Dashboard**: Grafana and InfluxDB for visualization
+
+Each node runs:
   - A dummy service (simulated workload)
   - Telegraf agent (monitoring)
   - ZeroMQ-based communication
   - Fault recovery system
   - CRIU for process checkpointing and migration
-- InfluxDB for metrics storage
-- Grafana for visualization
+  - ML-based fault prediction
 
 ## 📊 Monitoring
 
