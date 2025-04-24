@@ -116,7 +116,7 @@ All process state is preserved during migration, including:
 ## 🏗️ Architecture
 
 <p align="center">
-  <img src="horizontal-architecture.svg" alt="System Architecture Diagram" width="1000">
+  <img src="docs/images/Diagram.png" alt="System Architecture Diagram" width="1000">
 </p>
 
 The architecture consists of the following components:
