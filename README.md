@@ -4,7 +4,7 @@
 ![Docker](https://img.shields.io/badge/Docker-ready-brightgreen)
 ![Status](https://img.shields.io/badge/status-active-success)
 
-A distributed fault-tolerance system that simulates 3 independent nodes with monitoring, fault simulation, recovery capabilities, and process migration using CRIU.
+A distributed fault-tolerance system that simulates independent nodes with monitoring, fault simulation, recovery capabilities, and process migration using CRIU.
 
 
 ## 📋 Table of Contents
